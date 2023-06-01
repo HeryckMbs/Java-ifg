@@ -1,9 +1,8 @@
-package model.dao;
+package model.entities;
 
 import java.util.List;
-import model.entities.Curso;
 
-public interface CursoDAO {
+public interface CursoInterface {
 	
 	void insert(Curso obj);
 	void update(Curso obj);

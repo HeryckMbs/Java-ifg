@@ -5,20 +5,20 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-import model.dao.CursoDAOImp;
+import model.dao.DisciplinaDAOImp;
 import model.dao.FactoryDAO;
-import model.entities.Curso;
+import model.entities.Disciplina;
 
-public class TelaCurso {
+public class TelaDisciplina {
 	
-	static CursoDAOImp cursoDao =  FactoryDAO.createCursoDAO();
-	@SuppressWarnings("resource")
-	public static Scanner menuCurso(Scanner console) throws InterruptedException, ParseException {
+	static DisciplinaDAOImp DisciplinaDao = FactoryDAO.createDisciplinaDAO();
+	
+	public static Scanner menuDisciplina(Scanner console) throws InterruptedException, ParseException {
 
 		int opcao = 0;
 		do {
 			System.out.println("\n\n");
-			System.out.println("    ###   Tela: Curso     ###");
+			System.out.println("    ###   Tela: Disciplina     ###");
 			System.out.println("    =========================");
 			System.out.println("    |     1 - Cadastrar     |");
 			System.out.println("    |     2 - Listar        |");
@@ -51,18 +51,21 @@ public class TelaCurso {
 	
 	private static Scanner cadastrar(Scanner console) throws ParseException {
 		
-		Curso c = new Curso(); 
+		Disciplina d = new Disciplina(); 
 		
 		System.out.println("\n\n");
-		System.out.println("    ###   Curso-Cadastrar ###");
+		System.out.println("    ###   Disciplina-Cadastrar ###");
 		System.out.println("    =========================");
 		
 		System.out.print("    |     Nome: "); 
-	    c.setNomeCurso(console.nextLine());
-	    
+	    d.setNomedisciplina(console.nextLine());
+
 	    System.out.println("    =========================");
-	    
-	    cursoDao.insert(c);
+		System.out.print("    |     CARGA HORARIA: "); 
+
+	    d.setCargahoraria(console.nextLine());
+
+	    DisciplinaDao.insert(d);
 	    
 	    console.nextLine();
 	    return console;
@@ -70,16 +73,16 @@ public class TelaCurso {
 	
 	private static Scanner listar(Scanner console) {
 		
-		List<Curso> cursos =  cursoDao.findAll();
+		List<Disciplina> Disciplinas = DisciplinaDao.findAll();
 		
 		
 		System.out.println("\n\n");
-		System.out.println("    ###   Curso-Listar    ###");
+		System.out.println("    ###   Disciplina-Listar    ###");
 		System.out.println("    =========================");
 		System.out.println("    |     Id\tNome");
-		for(Curso c : cursos) { 
-			System.out.println("    |     " + c.getIdcurso()
-							 + "\t" 		+ c.getNomeCurso() ); 
+		for(Disciplina c : Disciplinas) { 
+			System.out.println("    |     " + c.getIddisciplina()
+							 + "\t" 		+ c.getNomedisciplina() ); 
 		}
 		System.out.println("    =========================");
 		console.nextLine();
@@ -88,20 +91,20 @@ public class TelaCurso {
 	
 	private static Scanner alterar(Scanner console) throws ParseException {
 		
-		Curso c = new Curso(); 
+		Disciplina c = new Disciplina(); 
 		
 		System.out.println("\n\n");
-		System.out.println("    ###   Curso-Alterar   ###");
+		System.out.println("    ###   Disciplina-Alterar   ###");
 		System.out.println("    =========================");  		
 		System.out.print("    |     Id: "); 
-		c.setIdcurso(console.nextInt()); 
+		c.setIddisciplina(console.nextInt()); 
 		console.nextLine();
 		  
 		System.out.print("    |     Nome: "); 
-		c.setNomeCurso(console.nextLine());
+		c.setNomedisciplina(console.nextLine());
 		  
 		System.out.println("    =========================");
-		cursoDao.update(c);
+		DisciplinaDao.update(c);
 		
 		console.nextLine();
 		return console;
@@ -110,14 +113,14 @@ public class TelaCurso {
 	private static Scanner excluir(Scanner console) throws ParseException {
 
 		System.out.println("\n\n");
-		System.out.println("    ###   Curso-Excluir   ###");
+		System.out.println("    ###   Disciplina-Excluir   ###");
 		System.out.println("    =========================");
 		System.out.print("    |     Digite o Id: ");
 		int id = console.nextInt();
 		console.nextLine();
 		System.out.println("    =========================");
 		
-		cursoDao.deleteById(id);
+		DisciplinaDao.deleteById(id);
 		
 		console.nextLine();
 		return console;

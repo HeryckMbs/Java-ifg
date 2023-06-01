@@ -8,36 +8,41 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.entities.CursoInterface;
-import model.entities.Curso;
+import model.entities.Aluno;
+import model.entities.AlunoInterface;
 
-public class CursoDAOImp implements CursoInterface {
+public class AlunoDAOImp implements AlunoInterface {
 
 	private Connection conexao;
 	
-	public CursoDAOImp(Connection conexao) {
+	public AlunoDAOImp(Connection conexao) {
 		this.conexao = conexao;
 	}
 
 	@Override
-	public void insert(Curso obj) {
+	public void insert(Aluno obj) {
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		
 		try {
-			String sql = "INSERT INTO curso (nomecurso) VALUES (?)";
+			String sql = "INSERT INTO Aluno (nome,sexo,dt_nasc,nota) VALUES (?,?,?,?)";
 			pst = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			pst.setString(1, obj.getNomeCurso());
+			pst.setString(1, obj.getNome());
+			pst.setString(2, obj.getSexo());
+			pst.setDate(3, obj.getDt_nas());
+			pst.setDouble(4, obj.getNota());
+
+
 			int linhas = pst.executeUpdate();
 			
 			if (linhas > 0) {
 				rs = pst.getGeneratedKeys();
 				rs.next();
-				obj.setIdcurso(rs.getInt(1));
+				obj.setIdAluno(rs.getInt(1));
 				System.out.println(obj.toString() + " foi criado com sucesso !");
 			}
 			else {
-				System.out.println("N�o foi poss�vel cadastrar o curso !");
+				System.out.println("N�o foi poss�vel cadastrar o Aluno !");
 			}
 			
 		}
@@ -47,25 +52,28 @@ public class CursoDAOImp implements CursoInterface {
 	}
 
 	@Override
-	public void update(Curso obj) {
-		String sql = "UPDATE curso SET nomeCurso = ? where idcurso = ?";
+	public void update(Aluno obj) {
+		String sql = "UPDATE Aluno SET nome = ?, sexo = ? , dt_nasc = ?, nota = ? where idAluno = ?";
 		PreparedStatement statement = null;
 		ResultSet resultado = null;
 		
 		try {
 			statement = conexao.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-			statement.setString(1, obj.getNomeCurso());
-			statement.setInt(2, obj.getIdcurso());
+			statement.setString(1, obj.getNome());
+			statement.setString(2, obj.getSexo());
+			statement.setDate(3, obj.getDt_nas());
+			statement.setDouble(4, obj.getNota());
+			statement.setInt(5, obj.getIdAluno());
 			int linhas = statement.executeUpdate();
 			
 			if (linhas > 0) {
 				resultado = statement.getGeneratedKeys();
 				resultado.next();
-				obj.setIdcurso(resultado.getInt(1));
+				obj.setIdAluno(resultado.getInt(1));
 				System.out.println(obj.toString() + " foi atualizado com sucesso !");
 			}
 			else {
-				System.out.println("N�o foi poss�vel atualizar o curso !");
+				System.out.println("N�o foi poss�vel atualizar o Aluno !");
 			}
 		}catch(Exception e) {
 				e.printStackTrace();
@@ -75,7 +83,7 @@ public class CursoDAOImp implements CursoInterface {
 
 	@Override
 	public void deleteById(Integer id) {
-		String sql = "DELETE FROM curso where idcurso = ?";
+		String sql = "DELETE FROM Aluno where idAluno = ?";
 		PreparedStatement statement = null;
 		ResultSet resultado= null;
 		
@@ -84,9 +92,9 @@ public class CursoDAOImp implements CursoInterface {
 			statement.setInt(1, id);
 			int linhas = statement.executeUpdate();
 			if(linhas > 0) {
-				System.out.println("Curso excluido com sucesso");
+				System.out.println("Aluno excluido com sucesso");
 			}else {
-				System.out.println("N�o foi poss�vel excluir o curso");
+				System.out.println("N�o foi poss�vel excluir o Aluno");
 			}
 		}catch(Exception e) {
 			
@@ -95,34 +103,37 @@ public class CursoDAOImp implements CursoInterface {
 	}
 
 	@Override
-	public Curso findById(Integer id) {
+	public Aluno findById(Integer id) {
 		
 		return null;
 	}
 
 	@Override
-	public List<Curso> findAll() {
-		String sql = "SELECT * FROM curso";
+	public List<Aluno> findAll() {
+		String sql = "SELECT * FROM aluno";
 		PreparedStatement statement = null;
 		ResultSet resultado = null;
-		List<Curso> cursos = new ArrayList<Curso>();
+		List<Aluno> Alunos = new ArrayList<Aluno>();
 		try {
 			statement = conexao.prepareStatement(sql);
 			resultado = statement.executeQuery();
 			
 			while(resultado.next()) {
 				if(resultado != null) {
-					Curso curso = new Curso(resultado.getInt("idcurso"),resultado.getString("nomeCurso"));
-					System.out.println(curso.toString());
-						cursos.add(curso);
-					
+					Aluno aluno = new Aluno();
+					aluno.setDt_nas(resultado.getDate("dt_nasc").toString());
+					aluno.setIdAluno(resultado.getInt("idAluno"));
+					aluno.setNome(resultado.getString("nome"));
+					aluno.setSexo(resultado.getString("sexo"));
+					aluno.setNota(resultado.getDouble("nota"));
+					Alunos.add(aluno);
 				}
 			}
-			System.out.println(cursos);
+			System.out.println(Alunos);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		return cursos;
+		return Alunos;
 	}
 
 }

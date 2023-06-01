@@ -17,18 +17,18 @@ public class TelaPrincipal {
 			System.out.println("    |     3 - Disciplina    |");
 			System.out.println("    |     0 - Sair          |");
 			System.out.println("    =========================");
-			System.out.print("    Opção -> ");
+			System.out.print("    Opï¿½ï¿½o -> ");
 			opcao = console.nextInt();
 			console.nextLine();
 			
 			switch (opcao) {
-				case 1: ;
+				case 1: return TelaAluno.menuAluno(console);
 				case 2: return TelaCurso.menuCurso(console);
-				case 3: ;
-				case 0: System.out.println("    Aplicação foi encerrada!");
+				case 3: return TelaDisciplina.menuDisciplina(console);
+				case 0: System.out.println("    Aplicaï¿½ï¿½o foi encerrada!");
 						break;
 				default:
-					System.out.println("Opção Inválida!");
+					System.out.println("Opï¿½ï¿½o Invï¿½lida!");
 					TimeUnit.SECONDS.sleep(1);
 			}
 		} while(opcao!=0);
